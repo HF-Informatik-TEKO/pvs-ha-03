@@ -1,9 +1,9 @@
-import java.util.ArrayList;
-
-public class MySemaphore {
+public class MyLineSemaphore {
     private int places = 0;
 
-    public MySemaphore(int places) {
+    public MyLineSemaphore() {}
+
+    public MyLineSemaphore(int places) {
         this.places = places;
     }
     
@@ -11,7 +11,8 @@ public class MySemaphore {
      * passing (enter)
      */
     public synchronized void passeren(int numberOfPlaces) {
-        if (places == 0){
+        numberOfPlaces = numberOfPlaces < 1 ? 1 : numberOfPlaces;
+        while (places < numberOfPlaces){
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -26,7 +27,16 @@ public class MySemaphore {
      * release (leave)
      */
     public synchronized void vrijgave(int numberOfPlaces) {
+        numberOfPlaces = numberOfPlaces < 1 ? 1 : numberOfPlaces;
         places += numberOfPlaces;
         notifyAll();
+    }
+
+    public void setPlaces(int places) {
+        this.places = places;
+    }
+
+    public int getPlaces(){
+        return places;
     }
 }
